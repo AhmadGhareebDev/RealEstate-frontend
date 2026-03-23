@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #FFFFFF;
+  --color-secondary: #111111;
+  --color-accent: #F2F2F2;
+  
+  --radius-xl: 32px;
+  --radius-2xl: 48px;
+
+  --font-display: "Montserrat", "Poppins", sans-serif;
+  --font-body: "Inter", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-white text-secondary font-body antialiased;
+    line-height: 1.6;
+    letter-spacing: 0.01em;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-bold uppercase;
+  }
+}
+
+@layer components {
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+
+  .absolute-center {
+    @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+  }
+
+  .section-kicker {
+    @apply text-sm font-medium tracking-widest uppercase mb-4 inline-block;
+  }
+  
+  .pill-button {
+    @apply px-8 py-4 rounded-full font-bold transition-all duration-300 flex items-center gap-2 cursor-pointer;
+  }
+
+  .pill-button-white {
+    @apply bg-white text-secondary hover:bg-accent;
+  }
+
+  .pill-button-dark {
+    @apply bg-secondary text-white hover:bg-black;
+  }
+
+  .hero-section {
+    @apply  relative h-screen w-full overflow-hidden bg-secondary flex flex-col justify-between p-8 md:p-16;
+  }
+
+  .search-discovery-section {
+    @apply py-24 px-8 md:px-16 bg-white;
+  }
+
+  .about-stats-section {
+    @apply pt-48 pb-16 px-8 md:px-16 bg-white overflow-hidden;
+  }
+
+  .benefits-grid-section {
+    @apply py-32 px-8 md:px-16 bg-white;
+  }
+
+  .property-showcase-section {
+    @apply py-32 px-8 md:px-16 bg-[#0a0a0a] text-white;
+  }
+
+  .completed-variants-section {
+    @apply py-32 px-8 md:px-16 bg-white;
+  }
+
+  .testimonials-section {
+    @apply py-32 px-8 md:px-16 bg-white overflow-hidden;
+  }
+
+  .footer-section {
+    @apply px-8 md:px-16 py-20 bg-secondary text-white;
+  }
+}
