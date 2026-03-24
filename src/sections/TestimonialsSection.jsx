@@ -1,22 +1,29 @@
-import React, { useLayoutEffect, useMemo, useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { TESTIMONIALS_CONTENT } from '../constants';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
 import { useMediaQuery } from 'react-responsive';
 
+
 const TestimonialsSection = () => {
   const rootRef = useRef(null);
   const pinRef = useRef(null);
-  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isMobile = useMediaQuery({ maxWidth: 767 });
 
   const { kicker, titleLines, testimonials } = TESTIMONIALS_CONTENT;
-  const cards = useMemo(() => testimonials ?? [], [testimonials]);
+  const cards = testimonials ?? []
 
   useLayoutEffect(() => {
-    if (isMobile || !rootRef.current || !pinRef.current) return;
+    if (!rootRef.current) return;
 
     const ctx = gsap.context(() => {
       const cardEls = gsap.utils.toArray('[data-testimonial-card]');
+
+      if (isMobile || !pinRef.current) {
+        gsap.set(cardEls, { clearProps: 'all' });
+        ScrollTrigger.refresh();
+        return;
+      }
 
       gsap.set(cardEls, { opacity: 0, y: 160, rotateX: 5, transformOrigin: '50% 100%' });
       gsap.set(cardEls[0], { opacity: 1, y: 0, rotateX: 0 });
@@ -34,38 +41,14 @@ const TestimonialsSection = () => {
 
       cardEls.forEach((el, i) => {
         if (i === 0) return;
-
-        const at = i;
-
-        tl.to(
-          el,
-          {
-            opacity: 1,
-            y: 0,
-            rotateX: 0,
-            duration: 1,
-            ease: 'none',
-          },
-          at
-        );
-
-        tl.to(
-          cardEls[i - 1],
-          {
-            scale: 0.92,
-            y: -40,
-            opacity: 0.3,
-            duration: 1,
-            ease: 'none',
-            filter: 'blur(4px)',
-          },
-          at
-        );
+        tl.to(el, { opacity: 1, y: 0, rotateX: 0, duration: 1, ease: 'none' }, i);
+        tl.to(cardEls[i - 1], { scale: 0.92, y: -40, opacity: 0.3, duration: 1, ease: 'none', filter: 'blur(12px)' }, i);
       });
     }, rootRef);
 
     return () => ctx.revert();
   }, [cards.length, isMobile]);
+
 
   return (
     <section id="testimonials" ref={rootRef} className="relative bg-surface py-20 md:py-32 overflow-hidden">

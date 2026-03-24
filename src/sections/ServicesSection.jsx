@@ -1,4 +1,8 @@
 import React from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/all';
+import { useGSAP } from '@gsap/react';
+
 
 const services = [
   {
@@ -38,11 +42,28 @@ const services = [
 ];
 
 const ServicesSection = () => {
+  const container = React.useRef();
+
+  useGSAP(
+    () => {
+      gsap.to('.service-card', {
+        opacity: 1,
+        stagger: 0.2,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: container.current,
+          start: 'top 80%'
+        }
+      });
+    }
+  );
+
+
   return (
-    <section id="services" className="bg-surface py-24 px-8 md:px-16">
+    <section id="services" ref={container} className="bg-surface py-24 px-8 md:px-16">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto w-full">
         {services.map((service, idx) => (
-          <div key={idx} className="service-card group flex flex-col gap-10 bg-surface-container-low p-10 rounded-lg transition-all hover:bg-surface-container-highest cursor-pointer border border-white/5 hover:border-primary/20 aspect-square justify-center">
+          <div key={idx} className="service-card opacity-0 group flex flex-col gap-10 bg-surface-container-low p-10 rounded-lg transition-all hover:bg-surface-container-highest hover:scale-105 cursor-pointer border border-white/5 hover:border-primary/20 aspect-square justify-center">
             
             <div className="flex flex-col gap-8 flex-1 justify-center">
               <div className="text-primary opacity-40 group-hover:opacity-100 transition-all duration-500 scale-100 group-hover:scale-110 w-fit">
