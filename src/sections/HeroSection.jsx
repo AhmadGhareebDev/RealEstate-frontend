@@ -1,92 +1,79 @@
+import React, { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { HERO_CONTENT } from '../constants';
 import gsap from 'gsap';
-import { useRef } from 'react';
-import { ScrollTrigger } from 'gsap/all';
-
 
 const HeroSection = () => {
-
-  const heroRef = useRef()
+  const heroRef = useRef();
+  const contentRef = useRef();
 
   useGSAP(() => {
+    const tl = gsap.timeline();
+    tl.fromTo('.hero-headline span', 
+      { y: 100, opacity: 0 },
+      { y: 0, opacity: 1, stagger: 0.1, duration: 1.2, ease: 'power4.out' }
+    )
+    .fromTo('.search-bar', 
+      { y: 40, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' },
+      '-=0.6'
+    );
 
-
-     const tl = gsap.timeline({
+    gsap.to('.hero-bg', {
+      yPercent: 20,
+      ease: 'none',
       scrollTrigger: {
         trigger: heroRef.current,
         start: 'top top',
-        end: '+=100%',
-        pin: true,
-        pinSpacing: false,
-        scrub: 1
-      }
-    })
-    
-    gsap.from('.animate' , {opacity : 0 , yPercent: 200 , ease: 'power2.inOut'})
-
-    tl.to('.first-word',  { x: '-5vw', yPercent: -240, ease: 'none' }, 0)
-    .to('.second-word', { x:  '32vw',  yPercent:  -360, ease: 'none' }, 0)
-    .to('.third-word',  { x: '80vw',  yPercent: -480, ease: 'none' }, 0)
-    .to('.brand' , {y: -200} , 0)
-  } ,{scope: heroRef , dependencies: []})
-
-
-  const {
-    brand,
-    consultationHref,
-    consultationLabel,
-    bg,
-    headlineLines,
-    description,
-    cta,
-  } = HERO_CONTENT;
+        end: 'bottom top',
+        scrub: true,
+      },
+    });
+  }, { scope: heroRef });
 
   return (
-    <section ref={heroRef} className="hero-section">
-      {/* Background Image Placeholder */}
+    <section ref={heroRef} className="relative h-screen flex flex-col items-center justify-center overflow-hidden bg-surface">
       <div className="absolute inset-0 z-0">
-        <img 
-          src={bg.src} 
-          alt={bg.alt} 
-          className="w-full h-full object-cover opacity-80"
+        <img
+          src="/images/hero-bg.png"
+          alt="Modern Architecture"
+          className="hero-bg w-full h-full object-cover opacity-60 scale-110"
         />
-        <div className="absolute inset-0 bg-linear-to-b from-black/40 via-transparent to-black/60" />
+        <div className="absolute inset-0 bg-linear-to-b from-surface/40 via-transparent to-surface" />
       </div>
 
-      {/* Top Navigation / Brand */}
-      <div className="relative z-10 flex justify-between items-start w-full">
-        <h1 className="brand animate text-white text-4xl md:text-6xl font-display tracking-tighter">
-          {brand}
-        </h1>
-        <a href={consultationHref} className=" text-white flex items-center gap-2 group hover:opacity-80 transition-opacity">
-          <span className="uppercase text-sm font-medium tracking-widest underline decoration-white/30 underline-offset-8">{consultationLabel}</span>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transform group-hover:translate-x-1 transition-transform">
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-            <polyline points="12 5 19 12 12 19"></polyline>
+      <div ref={contentRef} className="relative z-10 w-full max-w-7xl px-8 flex flex-col items-center gap-12 text-center">
+        <h2 className="hero-headline flex flex-col gap-2">
+          {['CURATED', 'ARCHITECTURE'].map((line, idx) => (
+            <span key={idx} className="block text-white font-display font-bold text-5xl md:text-8xl tracking-tight leading-none uppercase opacity-0">
+              {line}
+            </span>
+          ))}
+        </h2>
+
+        <div className="search-bar glass-card flex items-center gap-4 w-full max-w-2xl px-6 py-4 rounded-full group hover:bg-surface/60 transition-colors duration-300 opacity-0">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
           </svg>
-        </a>
-      </div>
+          
+          <input
+            type="text"
+            className="flex-1 bg-transparent border-none outline-none text-on-surface placeholder:text-on-surface/40 text-lg"
+            placeholder="Address, city, or neighborhood"
+          />
 
-      {/* Bottom Content */}
-      <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-8">
-        <div className="max-w-4xl">
-          <h2 className="animate text-white text-[80px] md:text-[140px] leading-[0.9] font-display mb-6 tracking-tighter">
-            <span className='first-word inline-block'>{headlineLines[0]}</span>
-            <span className='second-word inline-block'>{headlineLines[1]}</span>
-            <span className='third-word inline-block'>{headlineLines[2]}</span>
-           </h2>
-        </div>
-        
-        <div className="flex flex-col gap-6 md:max-w-xs mb-4">
-          <p className="animate text-white/80 text-lg leading-relaxed font-light">
-            {description}
-          </p>
-          <button className="animate pill-button pill-button-white w-fit group">
-            {cta.label}
-            <div className="w-2 h-2 rounded-full bg-secondary group-hover:scale-125 transition-transform" />
+          <button className="primary-gradient-cta rounded-full! p-3! flex items-center justify-center group-hover:scale-105 transition-transform cursor-pointer">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-surface">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
           </button>
         </div>
+      </div>
+
+      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-3">
+        <span className="label-sm text-on-surface/40">SCROLL DISCOVER</span>
+        <div className="w-px h-12 bg-linear-to-b from-primary/60 to-transparent" />
       </div>
     </section>
   );
