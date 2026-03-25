@@ -1,0 +1,212 @@
+import React, { useRef, useState, useMemo } from 'react';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+import { LISTINGS_DATA } from '../constants';
+
+const Listings = () => {
+  const containerRef = useRef();
+  
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterStatus, setFilterStatus] = useState('ALL');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+
+  const filteredData = useMemo(() => {
+    return LISTINGS_DATA.filter(item => {
+      const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          item.location.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesStatus = filterStatus === 'ALL' || item.status === filterStatus;
+      return matchesSearch && matchesStatus;
+    });
+  }, [searchQuery, filterStatus]);
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const currentItems = filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  useGSAP(() => {
+    gsap.fromTo('.listing-card', 
+      { y: 60, opacity: 0 },
+      { y: 0, opacity: 1, stagger: 0.05, ease: 'power3.out' }
+    );
+  }, { dependencies: [currentPage, filterStatus, searchQuery], scope: containerRef });
+
+  return (
+    <section ref={containerRef} className="pt-32 pb-32 px-8 md:px-16 min-h-screen bg-[#0e0e13]">
+      <div className="max-w-[1600px] mx-auto flex flex-col gap-12">
+        
+        {/* 1. Header & ADVANCED Filter Bar */}
+        <div className="flex flex-col gap-8 pb-8 border-b border-white/5">
+          <div className="flex flex-col gap-2">
+            <span className="label-sm text-primary tracking-[0.3em]">GH GLOBAL PORTFOLIO</span>
+            <h1 className="text-white text-4xl md:text-6xl font-display font-medium tracking-tight">The Collection</h1>
+          </div>
+
+          <div className="flex flex-col lg:flex-row justify-between items-center gap-6 bg-[#131318] p-4 rounded-xl border border-white/5 shadow-2xl">
+            {/* Left: Search */}
+            <div className="flex items-center gap-3 bg-surface-container-low px-6 py-3 rounded-full border border-white/5 w-full lg:w-80 group focus-within:border-primary/40 transition-all">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-on-surface/40 group-focus-within:text-primary transition-colors">
+                <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input 
+                type="text" 
+                placeholder="Search location..." 
+                className="bg-transparent border-none outline-none text-sm text-white placeholder:text-white/20 w-full font-medium"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+
+            {/* Center: Toggle */}
+            <div className="flex bg-surface-container-low p-1.5 rounded-full border border-white/5">
+              {['ALL', 'FOR SALE', 'FOR RENT'].map(status => (
+                <button 
+                  key={status}
+                  onClick={() => { setFilterStatus(status); setCurrentPage(1); }}
+                  className={`px-8 py-2 rounded-full text-[0.65rem] font-bold tracking-[0.2em] transition-all cursor-pointer ${
+                    filterStatus === status ? 'bg-primary text-surface' : 'text-on-surface/40 hover:text-white'
+                  }`}
+                >
+                  {status}
+                </button>
+              ))}
+            </div>
+
+            {/* Right: Dropdowns */}
+            <div className="flex gap-4 w-full lg:w-auto overflow-x-auto no-scrollbar pb-2 lg:pb-0">
+               {['Price Range', 'Beds & Baths', 'Status: Active'].map(filter => (
+                 <button key={filter} className="flex items-center gap-2 text-[0.65rem] font-bold tracking-[0.2em] text-white/60 whitespace-nowrap border border-white/10 px-5 py-3 rounded-full hover:border-primary transition-all cursor-pointer">
+                    {filter.toUpperCase()}
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                 </button>
+               ))}
+            </div>
+          </div>
+        </div>
+
+        {/* 2. Enhanced Listings Grid (4 Columns) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          {currentItems.map((item) => (
+            <article key={item.id} className="listing-card group flex flex-col bg-[#131318] rounded-xl overflow-hidden border border-white/5 hover:border-primary/20 transition-all duration-500 shadow-xl">
+              
+              {/* TOP: Image with Overlays */}
+              <div className="relative aspect-square overflow-hidden">
+                <img 
+                  src={item.img} 
+                  alt={item.title} 
+                  className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 group-hover:scale-105"
+                />
+                
+                {/* Badges Overlay */}
+                <div className="absolute top-4 left-4 flex flex-col gap-2">
+                  <span className="bg-primary text-surface text-[0.55rem] font-bold px-3 py-1 rounded-sm tracking-widest uppercase">
+                    {item.status}
+                  </span>
+                  <span className="bg-white/10 backdrop-blur-md text-white text-[0.55rem] font-bold px-3 py-1 rounded-sm tracking-widest uppercase border border-white/10">
+                    {item.badge}
+                  </span>
+                </div>
+
+                {/* Favorite Overlay */}
+                <button className="absolute top-4 right-4 bg-surface/40 backdrop-blur-md p-2 rounded-full border border-white/10 text-white/60 hover:text-primary hover:scale-110 transition-all cursor-pointer">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.89-8.89 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                </button>
+
+                {/* Owner Snippet Overlay */}
+                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 bg-surface/40 backdrop-blur-xl p-3 rounded-lg border border-white/10">
+                   <div className="flex items-center gap-3">
+                      <img src={item.owner.avatar} className="w-8 h-8 rounded-full border border-white/20" alt="Owner" />
+                      <div className="flex flex-col">
+                        <span className="text-[0.6rem] text-on-surface/40 font-bold uppercase tracking-widest">Listed by {item.owner.type}</span>
+                        <div className="flex items-center gap-1">
+                          <span className="text-white text-xs font-bold">{item.owner.name}</span>
+                          {item.owner.verified && <svg className="text-primary" width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>}
+                        </div>
+                      </div>
+                   </div>
+                </div>
+              </div>
+
+              {/* MIDDLE: Info Section */}
+              <div className="p-6 flex flex-col gap-6">
+                <div className="flex justify-between items-start">
+                  <div className="flex flex-col gap-1">
+                    <h3 className="text-white text-xl font-display font-medium leading-tight group-hover:text-primary transition-colors line-clamp-1">{item.title}</h3>
+                    <p className="text-on-surface/40 text-[0.65rem] font-bold tracking-widest uppercase">{item.location}</p>
+                  </div>
+                  <span className="text-primary font-bold text-lg whitespace-nowrap">{item.price}</span>
+                </div>
+
+                <div className="flex justify-between py-4 border-y border-white/5 text-[0.6rem] font-bold tracking-[0.2em] text-on-surface/60 uppercase">
+                  <span className="flex items-center gap-2">{item.specs.beds} Beds</span>
+                  <span className="flex items-center gap-2">{item.specs.baths} Baths</span>
+                  <span className="flex items-center gap-2">{item.specs.size} SQ FT</span>
+                </div>
+
+                {/* BOTTOM: Ratings & Actions */}
+                <div className="flex items-center justify-between pt-2">
+                   <div className="flex items-center gap-2">
+                     <svg className="text-primary" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                     <span className="text-white text-xs font-bold">{item.rating}</span>
+                     <span className="text-on-surface/30 text-[0.65rem] font-medium">({item.reviews})</span>
+                   </div>
+
+                   <div className="flex items-center gap-4">
+                      <button className="bg-primary text-surface text-[0.65rem] font-bold tracking-[0.2em] px-5 py-2.5 rounded-sm hover:opacity-90 transition-all cursor-pointer">
+                        VIEW DETAILS
+                      </button>
+                   </div>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        {/* 3. Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center gap-3 mt-12 py-8">
+             <button 
+               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+               className={`p-3 rounded-full border border-white/10 hover:border-primary transition-all cursor-pointer ${currentPage === 1 ? 'opacity-20 pointer-events-none' : 'text-white'}`}
+             >
+               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="15 18 9 12 15 6"></polyline></svg>
+             </button>
+
+             <div className="flex gap-2">
+               {[...Array(totalPages)].map((_, i) => (
+                 <button 
+                  key={i}
+                  onClick={() => setCurrentPage(i + 1)}
+                  className={`w-10 h-10 rounded-full text-[0.7rem] font-bold transition-all cursor-pointer border ${
+                    currentPage === i + 1 
+                    ? 'bg-primary border-primary text-surface' 
+                    : 'bg-[#131318] border-white/10 text-on-surface/40 hover:border-primary'
+                  }`}
+                 >
+                   {i + 1}
+                 </button>
+               ))}
+             </div>
+
+             <button 
+               onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+               className={`p-3 rounded-full border border-white/10 hover:border-primary transition-all cursor-pointer ${currentPage === totalPages ? 'opacity-20 pointer-events-none' : 'text-white'}`}
+             >
+               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="9 18 15 12 9 6"></polyline></svg>
+             </button>
+          </div>
+        )}
+
+        {filteredData.length === 0 && (
+          <div className="py-32 flex flex-col items-center gap-4 text-center">
+            <h3 className="text-white text-2xl font-display uppercase tracking-widest">No Properties Found</h3>
+            <p className="text-on-surface/40 body-lg max-w-xs">Adjust your filters to discover more architectural masterpieces.</p>
+            <button onClick={() => { setSearchQuery(''); setFilterStatus('ALL'); }} className="text-primary font-bold tracking-[0.2em] text-[0.7rem] mt-4 border-b border-primary pb-1">RESET FILTERS</button>
+          </div>
+        )}
+
+      </div>
+    </section>
+  );
+};
+
+export default Listings;
