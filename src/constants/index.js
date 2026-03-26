@@ -36,21 +36,45 @@ const defaultOwner = {
   name: 'Aleksandra Ghareeb',
   avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80',
   verified: true,
-  type: 'Owner'
+  type: 'Owner',
+  phone: '+44 20 7946 0958',
+  email: 'aleksandra@gh-estates.com'
 };
 
 const defaultAgent = {
   name: 'Xavier Vance',
   avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80',
   verified: true,
-  type: 'Agent'
+  type: 'Agent',
+  phone: '+44 20 7946 0123',
+  email: 'xavier.vance@gh-curators.com',
+  licenseNumber: 'LC-8921-X',
+  brokerage: "Sotheby's International"
 };
+
+const placeholderReviews = [
+  {
+    reviewer: 'Julian Vane',
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80',
+    rating: 5,
+    comment: 'An absolute masterpiece of modern minimalism. The light interplay in the main gallery is unlike anything I have seen.',
+    date: 'March 12, 2024'
+  },
+  {
+    reviewer: 'Elena Rossi',
+    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=150&q=80',
+    rating: 4,
+    comment: 'The integration with the Cotswolds landscape is daring yet respectful. A true architectural sanctuary.',
+    date: 'February 28, 2024'
+  }
+];
 
 export const LISTINGS_DATA = [
   {
     id: 1,
     title: 'The Obsidian Pavilion',
     location: 'Cotswolds, UK',
+    fullAddress: '12 Elderberry Lane, Cotswolds, GL54 2EN, United Kingdom',
     price: '$18,400,000',
     type: 'Estate',
     status: 'FOR SALE',
@@ -58,13 +82,24 @@ export const LISTINGS_DATA = [
     rating: 5.0,
     reviews: 12,
     specs: { beds: 8, baths: 12, size: '12,500' },
-    img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80',
-    owner: defaultOwner
+    img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80',
+    gallery: [
+      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1542718610-a1d656d1884c?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1531971511610-976e08f5d1ba?auto=format&fit=crop&w=1200&q=80',
+    ],
+    description: 'A harmonious intersection of historical Victorian aesthetics and contemporary minimalist philosophy. Situated within a private botanical enclave, this estate offers an unparalleled living experience defined by monolithic volumes and light-filled galleries designed for the world\'s most significant private art collections.',
+    owner: defaultOwner,
+    reviewsList: placeholderReviews,
+    createdAt: 'January 15, 2024',
+    updatedAt: 'March 20, 2024'
   },
   {
     id: 2,
     title: 'Monolith Sands',
     location: 'Joshua Tree, CA',
+    fullAddress: '888 Quartz Circle, Joshua Tree, CA 92252, USA',
     price: '$7,200,000',
     type: 'Modernist',
     status: 'FOR SALE',
@@ -72,13 +107,19 @@ export const LISTINGS_DATA = [
     rating: 4.8,
     reviews: 8,
     specs: { beds: 3, baths: 4, size: '4,200' },
-    img: 'https://images.unsplash.com/photo-1542718610-a1d656d1884c?auto=format&fit=crop&w=800&q=80',
-    owner: defaultAgent
+    img: 'https://images.unsplash.com/photo-1542718610-a1d656d1884c?auto=format&fit=crop&w=1200&q=80',
+    gallery: ['https://images.unsplash.com/photo-1542718610-a1d656d1884c?auto=format&fit=crop&w=1200&q=80'],
+    description: 'Cantilevered concrete volumes merging into the high desert landscape. This property defines the brutalist-ethos of the 21st century Mojave experience.',
+    owner: defaultAgent,
+    reviewsList: placeholderReviews.slice(0, 1),
+    createdAt: 'February 2, 2024',
+    updatedAt: 'February 2, 2024'
   },
   {
     id: 3,
     title: 'Emerald Terraces',
     location: 'Lake Como, Italy',
+    fullAddress: 'Via del Lago 45, Bellagio, Lake Como, Italy',
     price: '$24,500,000',
     type: 'Classic',
     status: 'FOR SALE',
@@ -86,13 +127,19 @@ export const LISTINGS_DATA = [
     rating: 4.9,
     reviews: 15,
     specs: { beds: 12, baths: 15, size: '18,600' },
-    img: 'https://images.unsplash.com/photo-1531971511610-976e08f5d1ba?auto=format&fit=crop&w=800&q=80',
-    owner: defaultOwner
+    img: 'https://images.unsplash.com/photo-1531971511610-976e08f5d1ba?auto=format&fit=crop&w=1200&q=80',
+    gallery: ['https://images.unsplash.com/photo-1531971511610-976e08f5d1ba?auto=format&fit=crop&w=1200&q=80'],
+    description: 'A historically preserved Neo-Renaissance villa with tiered gardens down to the shore. A legacy asset for the true connoisseur of European history.',
+    owner: defaultOwner,
+    reviewsList: placeholderReviews,
+    createdAt: 'December 10, 2023',
+    updatedAt: 'March 15, 2024'
   },
   {
     id: 4,
     title: 'Void House',
     location: 'Kyoto, Japan',
+    fullAddress: '22-4 Higashiyama, Kyoto, Japan',
     price: '$12,800,000',
     type: 'Zen',
     status: 'FOR SALE',
@@ -100,13 +147,19 @@ export const LISTINGS_DATA = [
     rating: 4.9,
     reviews: 21,
     specs: { beds: 5, baths: 6, size: '6,800' },
-    img: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=800&q=80',
-    owner: { ...defaultAgent, name: 'Suki Sato' }
+    img: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=1200&q=80',
+    gallery: ['https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=1200&q=80'],
+    description: 'Minimalist wood and stone structures centered around a hidden meditative forest courtyard.',
+    owner: { ...defaultAgent, name: 'Suki Sato' },
+    reviewsList: placeholderReviews,
+    createdAt: 'January 25, 2024',
+    updatedAt: 'February 10, 2024'
   },
   {
     id: 5,
     title: 'Solar Helix',
     location: 'Ibiza, Spain',
+    fullAddress: 'Cala Bassa Cliffside, Ibiza, Spain',
     price: '$9,100,000',
     type: 'Curvilinear',
     status: 'FOR RENT',
@@ -114,13 +167,19 @@ export const LISTINGS_DATA = [
     rating: 4.7,
     reviews: 6,
     specs: { beds: 4, baths: 5, size: '5,500' },
-    img: 'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=800&q=80',
-    owner: defaultOwner
+    img: 'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=1200&q=80',
+    gallery: ['https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=1200&q=80'],
+    description: 'Organic architectural flows with 270-degree Mediterranean horizons. Perfect for the seasonal pursuit of light.',
+    owner: defaultOwner,
+    reviewsList: placeholderReviews.slice(0, 1),
+    createdAt: 'March 1, 2024',
+    updatedAt: 'March 1, 2024'
   },
   {
     id: 6,
     title: 'The Concrete Peak',
     location: 'St. Moritz, CH',
+    fullAddress: 'Peak VII, St. Moritz, Switzerland',
     price: '$32,000,000',
     type: 'Alpine Chalet',
     status: 'FOR SALE',
@@ -128,13 +187,19 @@ export const LISTINGS_DATA = [
     rating: 5.0,
     reviews: 4,
     specs: { beds: 9, baths: 11, size: '14,200' },
-    img: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80',
-    owner: defaultAgent
+    img: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80',
+    gallery: ['https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80'],
+    description: 'Brutalist-inspired mountain retreat with absolute thermal luxury and panoramic peaks.',
+    owner: defaultAgent,
+    reviewsList: placeholderReviews,
+    createdAt: 'January 5, 2024',
+    updatedAt: 'February 28, 2024'
   },
   {
     id: 7,
     title: 'Lumina Loft',
     location: 'SoHo, NY',
+    fullAddress: '15 Mercer St, New York, NY 10013, USA',
     price: '$15,500,000',
     type: 'Penthouse',
     status: 'FOR SALE',
@@ -142,13 +207,19 @@ export const LISTINGS_DATA = [
     rating: 4.8,
     reviews: 10,
     specs: { beds: 4, baths: 3, size: '3,800' },
-    img: 'https://images.unsplash.com/photo-1502672023488-70e25813eb80?auto=format&fit=crop&w=800&q=80',
-    owner: defaultOwner
+    img: 'https://images.unsplash.com/photo-1502672023488-70e25813eb80?auto=format&fit=crop&w=1200&q=80',
+    gallery: ['https://images.unsplash.com/photo-1502672023488-70e25813eb80?auto=format&fit=crop&w=1200&q=80'],
+    description: 'A light-drenched industrial penthouse in the heart of SoHo.',
+    owner: defaultOwner,
+    reviewsList: placeholderReviews,
+    createdAt: 'December 20, 2023',
+    updatedAt: 'March 2, 2024'
   },
   {
     id: 8,
     title: 'Aqueous Villa',
     location: 'Malibu, CA',
+    fullAddress: '1 Pacific Coast Hwy, Malibu, CA 90265, USA',
     price: '$21,000,000',
     type: 'Oceanfront',
     status: 'FOR SALE',
@@ -156,13 +227,19 @@ export const LISTINGS_DATA = [
     rating: 4.9,
     reviews: 18,
     specs: { beds: 6, baths: 8, size: '9,200' },
-    img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80',
-    owner: defaultAgent
+    img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80',
+    gallery: ['https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80'],
+    description: 'Absolute oceanfront luxury where the architecture bleeds into the horizon.',
+    owner: defaultAgent,
+    reviewsList: placeholderReviews,
+    createdAt: 'November 15, 2023',
+    updatedAt: 'March 20, 2024'
   },
   {
     id: 9,
     title: 'Velvet Ridge',
     location: 'Aspen, CO',
+    fullAddress: '55 Ridge Rd, Aspen, CO 81611, USA',
     price: '$19,800,000',
     type: 'Lodge',
     status: 'FOR RENT',
@@ -170,13 +247,19 @@ export const LISTINGS_DATA = [
     rating: 4.7,
     reviews: 9,
     specs: { beds: 7, baths: 9, size: '11,000' },
-    img: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=800&q=80',
-    owner: defaultOwner
+    img: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=1200&q=80',
+    gallery: ['https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=1200&q=80'],
+    description: 'A wood and glass lodge redefining mountain living at high altitudes.',
+    owner: defaultOwner,
+    reviewsList: placeholderReviews,
+    createdAt: 'February 10, 2024',
+    updatedAt: 'February 10, 2024'
   },
   {
     id: 10,
     title: 'Citadel Manor',
     location: 'Provence, FR',
+    fullAddress: 'Chateau de Pierre, Aix-en-Provence, France',
     price: '$14,200,000',
     type: 'Heritage',
     status: 'FOR SALE',
@@ -184,13 +267,19 @@ export const LISTINGS_DATA = [
     rating: 5.0,
     reviews: 2,
     specs: { beds: 10, baths: 12, size: '15,000' },
-    img: 'https://images.unsplash.com/photo-1542718610-a1d656d1884c?auto=format&fit=crop&w=800&q=80',
-    owner: defaultAgent
+    img: 'https://images.unsplash.com/photo-1542718610-a1d656d1884c?auto=format&fit=crop&w=1200&q=80',
+    gallery: ['https://images.unsplash.com/photo-1542718610-a1d656d1884c?auto=format&fit=crop&w=1200&q=80'],
+    description: 'A fortified manor bridging the gap between medieval strength and modern comfort.',
+    owner: defaultAgent,
+    reviewsList: placeholderReviews.slice(0, 1),
+    createdAt: 'October 5, 2023',
+    updatedAt: 'January 12, 2024'
   },
   {
     id: 11,
     title: 'Neon Horizon',
     location: 'Tokyo, JP',
+    fullAddress: '3-1-1 Roppongi, Minato-ku, Tokyo, Japan',
     price: '$8,900,000',
     type: 'Cyber-Minimalist',
     status: 'FOR SALE',
@@ -198,13 +287,19 @@ export const LISTINGS_DATA = [
     rating: 4.6,
     reviews: 14,
     specs: { beds: 3, baths: 3, size: '2,900' },
-    img: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80',
-    owner: defaultOwner
+    img: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80',
+    gallery: ['https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80'],
+    description: 'High-altitude living in Tokyo\'s most vibrant architectural district.',
+    owner: defaultOwner,
+    reviewsList: placeholderReviews,
+    createdAt: 'December 1, 2023',
+    updatedAt: 'March 1, 2024'
   },
   {
     id: 12,
     title: 'Gilded Gate',
     location: 'Bel Air, CA',
+    fullAddress: '1001 Bel Air Rd, Los Angeles, CA 90077, USA',
     price: '$45,000,000',
     type: 'Mega Mansion',
     status: 'FOR SALE',
@@ -212,7 +307,12 @@ export const LISTINGS_DATA = [
     rating: 5.0,
     reviews: 30,
     specs: { beds: 15, baths: 20, size: '25,000' },
-    img: 'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=800&q=80',
-    owner: defaultAgent
+    img: 'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=1200&q=80',
+    gallery: ['https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=1200&q=80'],
+    description: 'The definitive architectural statement of Bel Air. Massive glass volumes and gold-leaf details throughout.',
+    owner: defaultAgent,
+    reviewsList: placeholderReviews,
+    createdAt: 'November 1, 2023',
+    updatedAt: 'March 25, 2024'
   }
 ];
