@@ -42,7 +42,7 @@ const TestimonialsSection = () => {
       cardEls.forEach((el, i) => {
         if (i === 0) return;
         tl.to(el, { opacity: 1, y: 0, rotateX: 0, duration: 1, ease: 'none' }, i);
-        tl.to(cardEls[i - 1], { scale: 0.92, y: -40, opacity: 0.3, duration: 1, ease: 'none', filter: 'blur(12px)' }, i);
+        tl.to(cardEls[i - 1], { scale: 0.92, y: -40, opacity: 0.3, duration: 1, ease: 'none', filter: 'blur(6px)' }, i);
       });
     }, rootRef);
 
